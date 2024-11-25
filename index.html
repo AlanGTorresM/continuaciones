@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopScript</title>
+    <!-- CSS compilado de Tailwind -->
+    <link rel="stylesheet" href="dist/styles.css">
+    <!-- Fuentes para nuestra página -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <!-- Navbar -->
+    <header class=" bg-gray-800 shadow-md z-50">
+        <nav class="container mx-auto flex justify-between items-center p-6">
+            <h1 class="text-2xl font-bold text-orange-400">SHOPSCRIPT</h1>
+            <ul class="flex space-x-6">
+                <li class="text-orange-400 hover:text-green-500 transition-colors"><a href="#">Inicio</a></li>
+                <li class="text-orange-400 hover:text-green-500 transition-colors"><a href="#">Crear cuenta</a></li>
+                <li id="iniciar_sesion" class="text-orange-400 hover:text-green-500 transition-colors"><a href="#">Iniciar Sesión</a></li>
+                <li class="text-orange-400 hover:text-green-500 transition-colors"><a href="#footer">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+
+    <!-- Contenido principal -->
+    <main class="container mx-auto p-6">
+        <!-- Sección principal con imagen -->
+        <section class="relative mb-12">
+            <img src="images/compras-en-linea.jpg" alt="Compras en línea" class="w-full h-64 object-cover rounded-lg shadow-md">
+            <h2 class="absolute bottom-4 left-4 text-white text-2xl bg-gray-800 bg-opacity-75 px-4 py-2 rounded">
+                ¡Compra y vende en una página dedicada a ti!
+            </h2>
+        </section>
+
+        <!-- Secciones de contenido -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-gray-200 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                <h2 class="text-xl font-semibold text-orange-400">¿Quiénes somos?</h2>
+                <p class="mt-2 text-gray-600">Somos una plataforma dedicada a facilitar la compra y venta en línea, ofreciendo una experiencia segura y confiable para nuestros usuarios.</p>
+            </div>
+            <div class="bg-gray-200 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                <h2 class="text-xl font-semibold text-orange-400">¿Cómo puedes vender/comprar?</h2>
+                <p class="mt-2 text-gray-600">Simplemente crea una cuenta, publica tus productos o explora nuestras categorías para encontrar lo que necesitas. ¡Es fácil y rápido!</p>
+            </div>
+            <div class="bg-gray-200 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                <h2 class="text-xl font-semibold text-orange-400">Únete a nuestra maravillosa página</h2>
+                <p class="mt-2 text-gray-600">Regístrate hoy mismo y comienza a disfrutar de todos los beneficios que SHOPSCRIPT tiene para ofrecerte.</p>
+            </div>
+        </section>
+
+        <!-- Botón para comprar -->
+        <section class="mt-12 text-center">
+            <h2 class="text-2xl font-semibold text-gray-800">¡Empieza a comprar dando click aquí abajo!</h2>
+            <a href="#" class="mt-4 inline-block bg-orange-400 text-white px-6 py-3 rounded-full shadow hover:bg-green-500 transition-colors">
+                ¡Empieza a comprar!
+            </a>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer id="footer" class="bg-gray-800 mt-12">
+        <div class="container mx-auto p-6 text-center text-gray-400">
+            <p>&copy; SHOPSCRIPT 2021. Todos los derechos reservados.</p>
+            <p>Proyecto de la Facultad de Estudios Superiores Aragón</p>
+        </div>
+    </footer>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="scripts/index.js" type="module" defer></script>
+</html>
