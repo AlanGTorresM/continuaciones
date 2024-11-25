@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account</title>
+  <!-- CSS compilado de Tailwind -->
+  <link rel="stylesheet" href="dist/styles.css">
+</head>
+<body class="bg-gray-800 text-white min-h-screen flex items-center justify-center">
+  <div class="bg-gray-900 rounded-lg shadow-lg p-8 max-w-md w-full">
+    <h1 class="text-3xl font-bold text-orange-500 text-center mb-6">Crea tu cuenta</h1>
+    <form>
+      <!-- Nombre -->
+      <div class="mb-4">
+        <label for="name" class="block text-sm font-medium text-orange-400">Nombre</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          placeholder="Aquí tu nombre"
+          class="w-full px-4 py-2 mt-1 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+          required>
+      </div>
+
+      <!-- Celular -->
+      <div class="mb-4">
+        <label for="cellphone" class="block text-sm font-medium text-orange-400">Cellphone</label>
+        <input 
+          type="tel" 
+          id="cellphone" 
+          name="cellphone" 
+          placeholder="ingresa tu numero telefonico"
+          class="w-full px-4 py-2 mt-1 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+          required>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-4">
+        <label for="email" class="block text-sm font-medium text-orange-400">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          placeholder="ingresa tu email"
+          class="w-full px-4 py-2 mt-1 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+          required>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-6">
+        <label for="password" class="block text-sm font-medium text-orange-400">Contraseña</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          placeholder="Ingresa tu Contraseña"
+          class="w-full px-4 py-2 mt-1 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+          required>
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+        Crea tu cuenta!
+      </button>
+    </form>
+  </div>
+</body>
+</html>
