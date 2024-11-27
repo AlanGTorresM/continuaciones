@@ -1,3 +1,5 @@
+import { supabase } from './Base de datos/supabase.js';
+
 class User {
     static idCounter = 1;
 
@@ -13,4 +15,42 @@ class User {
         this.productsBought = [];
         this.cart = [];
     }
+
+    async register() {
+        // Validación básica
+        if (!this.name || !this.email || !this.password || !this.cellphone) {
+            throw new Error('Todos los campos son obligatorios.');
+        }
+
+        // Crear el objeto del usuario
+        const newUser = {
+            id: this.id,
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            cellphone: this.cellphone,
+            is_logged_in: true,
+            is_seller: this.isSeller,
+            wishlist: this.wishlist,
+            products_bought: this.productsBought,
+            cart: this.cart,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        };
+
+        // Insertar en la base de datos
+        const { data, error } = await supabase
+            .from('usuarios')
+            .insert(newUser);
+
+        if (error) {
+            console.error('Error al registrar el usuario:', error.message);
+            throw error;
+        }
+
+        console.log('Usuario registrado:', data);
+        return data;
+    }
 }
+
+export default User;
