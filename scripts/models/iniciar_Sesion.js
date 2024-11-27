@@ -11,8 +11,8 @@ export function inicio_sesion(){
                 </div>
                 
                 <div class="mb-4">
-                    <label for="Contraseña" class="block text-sm font-medium text-gray-700 mb-1">Ingresa tu contraseña:</label>
-                    <input type="password" id="Contraseña" placeholder="Aquí tu contraseña"
+                    <label for="Password" class="block text-sm font-medium text-gray-700 mb-1">Ingresa tu contraseña:</label>
+                    <input type="password" id="Password" placeholder="Aquí tu contraseña"
                         class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
                 </div>
                 

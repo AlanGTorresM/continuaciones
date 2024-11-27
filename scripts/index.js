@@ -11,37 +11,37 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 // Crear cliente Supabase
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Prueba de conexión a Supabase
-async function pruebaConexion() {
-    try {
-        console.log('Intentando conectar con Supabase...');
-        const { data, error } = await supabase.from('users').select('*');
-        if (error) {
-            console.error('Error de Supabase:', error.message);
-        } else {
-            console.log('Conexión exitosa. Datos obtenidos:', data);
-        }
-    } catch (err) {
-        console.error('Error inesperado:', err);
-    }
-}
-pruebaConexion();
+// /*                          PRUEBAS PARA VER SI CONECTA CON SUPABASE                         */
+// async function pruebaConexion() {
+//     try {
+//         console.log('Intentando conectar con Supabase...');
+//         const { data, error } = await supabase.from('users').select('*');
+//         if (error) {
+//             console.error('Error de Supabase:', error.message);
+//         } else {
+//             console.log('Conexión exitosa. Datos obtenidos:', data);
+//         }
+//     } catch (err) {
+//         console.error('Error inesperado:', err);
+//     }
+// }
+// pruebaConexion();
 
-// Obtener datos de sesión
-async function datosConexion() {
-    try {
-        console.log('Intentando obtener datos de sesión...');
-        const { data, error } = await supabase.from('users').select('*');
-        if (error) {
-            console.error('Error al obtener datos de sesión:', error.message);
-        } else {
-            console.log('Datos de sesión obtenidos:', data);
-        }
-    } catch (err) {
-        console.error('Error inesperado:', err);
-    }
-}
-datosConexion();
+// // Obtener datos de sesión
+// async function datosConexion() {
+//     try {
+//         console.log('Intentando obtener datos de sesión...');
+//         const { data, error } = await supabase.from('users').select('*');
+//         if (error) {
+//             console.error('Error al obtener datos de sesión:', error.message);
+//         } else {
+//             console.log('Datos de sesión obtenidos:', data);
+//         }
+//     } catch (err) {
+//         console.error('Error inesperado:', err);
+//     }
+// }
+// datosConexion();
 
 // Mostrar anuncio principal
 document.body.innerHTML += anuncio();
@@ -56,7 +56,6 @@ document.addEventListener('click', (e) => {
     // Verificar si el clic fue en el enlace de "Iniciar Sesión"
     if (e.target.closest('#iniciar_sesion a')) {
         e.preventDefault(); // Evitar la redirección
-        console.log("Se dio clic en Iniciar Sesión");
 
         // Agregar formulario de inicio de sesión solo si no existe ya
         if (!document.querySelector('#iniciar_Sesion')) {
@@ -64,5 +63,35 @@ document.addEventListener('click', (e) => {
             listenerScroll();
             listenerClose(); // Activar cierre para el formulario
         }
+        //Validar información en supabase
+        const loginButton = document.querySelector('#iniciar_Sesion button');
+        loginButton.addEventListener('click', async ()=>{
+            const email = document.querySelector('#Correo').value;
+                const password = document.querySelector('#Password').value;
+
+                if (!email || !password) {
+                    alert('Por favor, completa todos los campos.');
+                    return;
+                }
+
+                // Consultar la tabla 'users' para encontrar el correo
+                const {data} = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('email', email)
+                    .single(); // Devuelve un único resultado
+
+                if (data) {
+                    // Validar la contraseña
+                    if (data.password === password) { // Cambia según cómo almacenes la contraseña
+                        alert('Inicio de sesión exitoso.');
+                        console.log('Usuario:', data);
+                    } else {
+                        alert('Contraseña incorrecta.');
+                    }
+                } else {
+                    alert('El usuario no existe o la contraseña es incorrecta.');
+                }
+        });
     }
 });
