@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle del Producto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .modal {
+      display: none; /* Oculta por defecto */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(254, 253, 251, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: rgba(251, 142, 9, 0.5);
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #f28c85;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+    .carousel {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+    .carousel-images {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+    .carousel-images img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+    .carousel-btn.prev {
+      left: 10px;
+    }
+    .carousel-btn.next {
+      right: 10px;
+    }
+    .product-details {
+      margin-top: 15px;
+      text-align: left;
+    }
+    .product-details p {
+      margin: 10px 0;
+    }
+    .button {
+      display: inline-block;
+      background-color: #8ca5c0;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Botón para abrir la pantalla emergente -->
+<button class="button" onclick="openModal()">Ver Detalle del Producto</button>
+
+<!-- Pantalla emergente -->
+<div id="productModal" class="modal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal()">&times;</button>
+    <!-- Carrusel de imágenes -->
+    <div class="carousel">
+      <div id="carouselImages" class="carousel-images">
+        <!-- Imágenes dinámicas aquí -->
+      </div>
+      <button class="carousel-btn prev" onclick="prevImage()">&#10094;</button>
+      <button class="carousel-btn next" onclick="nextImage()">&#10095;</button>
+    </div>
+    <!-- Detalles del producto -->
+    <div class="product-details">
+      <h2 id="productName">Nombre del Producto</h2>
+      <p id="productDescription">Descripción detallada del producto que subió el vendedor.</p>
+      <p><strong>Precio:</strong> $<span id="productPrice">0.00</span> MXN</p>
+      <p><strong>Existencias:</strong> <span id="productStock">0</span> unidades</p>
+    </div>
+    <button class="button" onclick="addToCart()">Añadir al Carrito</button>
+  </div>
+</div>
+
+<script>
+  // Simulación de datos del producto
+  const product = {
+    name: "Producto X",
+    description: "Dscripción para el producto. Incluye información importante que el vendedor subió.",
+    price: 250.00,
+    stock: 15,
+    images: [
+      "https://via.placeholder.com/300?text=Imagen+1",
+      "https://via.placeholder.com/300?text=Imagen+2",
+      "https://via.placeholder.com/300?text=Imagen+3"
+    ]
+  };
+
+  let currentImageIndex = 0;
+
+  // Abre el modal
+  function openModal() {
+    document.getElementById('productModal').style.display = 'flex';
+    document.getElementById('productName').textContent = product.name;
+    document.getElementById('productDescription').textContent = product.description;
+    document.getElementById('productPrice').textContent = product.price.toFixed(2);
+    document.getElementById('productStock').textContent = product.stock;
+
+    // Llenar el carrusel con imágenes
+    const carouselImages = document.getElementById('carouselImages');
+    carouselImages.innerHTML = ''; // Limpiar el carrusel
+    product.images.forEach((image, index) => {
+      const imgElement = document.createElement('img');
+      imgElement.src = image;
+      imgElement.alt = `Imagen ${index + 1}`;
+      carouselImages.appendChild(imgElement);
+    });
+    updateCarousel();
+  }
+
+  // Actualiza el carrusel
+  function updateCarousel() {
+    const carouselImages = document.getElementById('carouselImages');
+    const offset = -currentImageIndex * 100; // Moverse al índice actual
+    carouselImages.style.transform = `translateX(${offset}%)`;
+  }
+
+  // Navegar al anterior
+  function prevImage() {
+    currentImageIndex = (currentImageIndex - 1 + product.images.length) % product.images.length;
+    updateCarousel();
+  }
+
+  // Navegar al siguiente
+  function nextImage() {
+    currentImageIndex = (currentImageIndex + 1) % product.images.length;
+    updateCarousel();
+  }
+
+  // Cierra el modal
+  function closeModal() {
+    document.getElementById('productModal').style.display = 'none';
+  }
+
+  // Simulación de añadir al carrito
+  function addToCart() {
+    alert(`${product.name} añadido al carrito!`);
+
+  }
+</script>
+
+</body>
+</html>

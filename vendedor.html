@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario para Vendedores</title>
+    <link rel="stylesheet" href="vendedor.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Portal para Vendedores</h1>
+        <button class="open-modal-btn" id="openModal">Agregar Producto</button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Subir un Producto</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm" action="/subir-producto" method="POST" enctype="multipart/form-data">
+                    <label for="productName">Nombre del Artículo</label>
+                    <input type="text" id="productName" name="productName" required>
+
+                    <label for="productImage">Fotos del Artículo</label>
+                    <input type="file" id="productImage" name="productImage" accept="image/*" multiple required>
+
+                    <label for="unitPrice">Precio Unitario</label>
+                    <input type="number" id="unitPrice" name="unitPrice" step="0.01" required>
+
+                    <label for="stock">Existencias</label>
+                    <input type="number" id="stock" name="stock" min="1" required>
+
+                    <label for="description">Descripción Detallada</label>
+                    <textarea id="description" name="description" rows="4" required></textarea>
+
+                    <button type="submit" class="submit-btn">Subir Producto</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const openModal = document.getElementById('openModal');
+        const closeModal = document.getElementById('closeModal');
+        const modal = document.getElementById('productModal');
+
+        // Open modal
+        openModal.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+
+        // Close modal
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Close modal if clicked outside
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
