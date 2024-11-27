@@ -40,8 +40,8 @@ class User {
 
         // Insertar en la base de datos
         const { data, error } = await supabase
-            .from('usuarios')
-            .insert(newUser);
+            .from('users')
+            .insert([newUser]);
 
         if (error) {
             console.error('Error al registrar el usuario:', error.message);
