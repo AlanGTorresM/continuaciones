@@ -1,6 +1,7 @@
 export function listenerScroll(){
     // Manejo del desplazamiento
-    window.addEventListener('scroll', () => {
+    window.addEventListener('scroll', (e) => {
+        e.preventDefault();
         let anuncio = document.querySelector(".anuncio");
         const scrollY = window.scrollY;
         anuncio.style.transform = `translateY(${scrollY}px)`;

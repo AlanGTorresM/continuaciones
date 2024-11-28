@@ -29,21 +29,32 @@ async function insertUserDirectly(name, cellphone, email, password) {
     };
 
     try {
-        // Insertar el usuario en la tabla `users`
-        const { data, error } = await supabase.from('users').insert([newUser]);
-
+        const {data} = await supabase.from('users').insert([newUser]);
+    
         if (error) {
-            console.error('Error al registrar el usuario:', error.message);
-            alert(`Error al registrar usuario: ${error.message}`);
+            console.error('Error al registrar el usuario:', error);
+            alert('Error al registrar el usuario');
             return;
         }
-
-        console.log('Usuario registrado:', data);
-        alert('Usuario registrado exitosamente');
+    
+        console.log('Datos recibidos de Supabase:', data);
+    
+        if (data && data.length > 0) {
+            const userToStore = {
+                id: data[0].id,
+                name: data[0].name,
+                email: data[0].email,
+            };
+    
+            console.log('Guardando en localStorage:', userToStore);
+            localStorage.setItem('user', JSON.stringify(userToStore));
+            alert('Usuario registrado exitosamente');
+        }
     } catch (err) {
-        console.error('Error inesperado:', err.message);
+        console.error('Error inesperado:', err);
         alert('Error inesperado: ' + err.message);
     }
+    
 }
 
 // Manejar el evento de clic en el botón
