@@ -1,4 +1,5 @@
 import User from './users.js';
+import { supabase } from './Base de datos/supabase.js';
 class Producto {
     static id = 1;
 
