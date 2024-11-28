@@ -7,58 +7,55 @@ const password = document.querySelector('#password');
 const submit = document.querySelector('button');
 
 async function insertUserDirectly(name, cellphone, email, password) {
-    // Validación básica
-    if (!name || !cellphone || !email || !password) {
-        alert('Todos los campos son obligatorios.');
-        return;
+  // Validación básica
+  if (!name || !cellphone || !email || !password) {
+    alert("Todos los campos son obligatorios.");
+    return;
+  }
+
+  // Crear objeto del usuario
+  const newUser = {
+    name: name,
+    cellphone: cellphone,
+    email: email,
+    password: password,
+    is_logged_in: false,
+    is_seller: false,
+    wishlist: [],
+    products_bought: [],
+    cart: [],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+
+  try {
+    const data = await supabase.from("users").insert([newUser]);
+
+    if (data.error) {
+      console.error("Error al registrar el usuario:", data.error);
+      return;
     }
 
-    // Crear objeto del usuario
-    const newUser = {
-        name: name,
-        cellphone: cellphone,
-        email: email,
-        password: password,
-        is_logged_in: false,
-        is_seller: false,
-        wishlist: [],
-        products_bought: [],
-        cart: [],
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-    };
+    console.log("Datos recibidos de Supabase:", data);
 
-    try {
-        const {data} = await supabase.from('users').insert([newUser]);
-    
-        if (error) {
-            console.error('Error al registrar el usuario:', error);
-            alert('Error al registrar el usuario');
-            return;
-        }
-    
-        console.log('Datos recibidos de Supabase:', data);
-    
-        if (data && data.length > 0) {
-            const userToStore = {
-                id: data[0].id,
-                name: data[0].name,
-                email: data[0].email,
-            };
-    
-            console.log('Guardando en localStorage:', userToStore);
-            localStorage.setItem('user', JSON.stringify(userToStore));
-            alert('Usuario registrado exitosamente');
-        }
-    } catch (err) {
-        console.error('Error inesperado:', err);
-        alert('Error inesperado: ' + err.message);
+    if (data && data.status == 201) {
+      const userToStore = {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+      };
+
+      console.log("Guardando en localStorage:", userToStore);
+      localStorage.setItem("user", JSON.stringify(userToStore));
     }
-    
+  } catch (err) {
+    console.error("Error inesperado:", err);
+  }
 }
 
 // Manejar el evento de clic en el botón
-submit.addEventListener('click', async () => {
+submit.addEventListener('click', async (e) => {
+    e.preventDefault();
     const nameValue = nombre.value.trim();
     const cellphoneValue = cellphone.value.trim();
     const emailValue = email.value.trim();
