@@ -4,51 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario para Vendedores</title>
-    <link rel="stylesheet" href="./styles/vendedor.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="container">
-        <h1>Portal para Vendedores</h1>
-        <button class="open-modal-btn" id="openModal">Agregar Producto</button>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-6">
+        <!-- Header -->
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Portal para Vendedores</h1>
+        <button id="openModal" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Agregar Producto
+        </button>
     </div>
 
     <!-- Modal -->
-    <div class="modal" id="productModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Subir un Producto</h2>
-                <button class="close-btn" id="closeModal">&times;</button>
+    <div id="productModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">Subir un Producto</h2>
+                <button id="closeModal" class="text-gray-600 hover:text-red-500 text-2xl">&times;</button>
             </div>
-            <div class="modal-body">
-                <form id="productForm" action="/subir-producto" method="POST" enctype="multipart/form-data">
-                    <label for="productName">Nombre del Artículo</label>
-                    <input type="text" id="productName" name="productName" required>
-
-                    <label for="productImage">Fotos del Artículo</label>
-                    <input type="file" id="productImage" name="productImage" accept="image/*" multiple required>
-
-                    <label for="unitPrice">Precio Unitario</label>
-                    <input type="number" id="unitPrice" name="unitPrice" step="0.01" required>
-
-                    <label for="stock">Existencias</label>
-                    <input type="number" id="stock" name="stock" min="1" required>
-
-                    <label for="description">Descripción Detallada</label>
-                    <textarea id="description" name="description" rows="4" required></textarea>
-
-                    <button type="submit" class="submit-btn">Subir Producto</button>
+            <div>
+                <form id="productForm" action="/subir-producto" method="POST" enctype="multipart/form-data" class="space-y-4">
+                    <div>
+                        <label for="productName" class="block text-gray-700 font-medium">Nombre del Artículo</label>
+                        <input type="text" id="productName" name="productName" required
+                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300">
+                    </div>
+                    <div>
+                        <label for="productImage" class="block text-gray-700 font-medium">Fotos del Artículo</label>
+                        <input type="file" id="productImage" name="productImage" accept="image/*" multiple required
+                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300">
+                    </div>
+                    <div>
+                        <label for="unitPrice" class="block text-gray-700 font-medium">Precio Unitario</label>
+                        <input type="number" id="unitPrice" name="unitPrice" step="0.01" required
+                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300">
+                    </div>
+                    <div>
+                        <label for="stock" class="block text-gray-700 font-medium">Existencias</label>
+                        <input type="number" id="stock" name="stock" min="1" required
+                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300">
+                    </div>
+                    <div>
+                        <label for="description" class="block text-gray-700 font-medium">Descripción Detallada</label>
+                        <textarea id="description" name="description" rows="4" required
+                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"></textarea>
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        Subir Producto
+                    </button>
                 </form>
             </div>
         </div>
     </div>
-    <div class="tabla">
-        <table id="tabla-productos">
-            <tr>
-              <th>Imagen</th>
-              <th>Producto</th>
-              <th>Acciones</th>
-            </tr>
-          </table>
+
+    <!-- Tabla -->
+    <div class="container mx-auto p-6">
+        <table id="tabla-productos" class="w-full bg-white rounded-lg shadow-lg">
+            <thead>
+                <tr class="bg-gray-200 text-gray-700 uppercase text-sm">
+                    <th class="px-4 py-2">Imagen</th>
+                    <th class="px-4 py-2">Producto</th>
+                    <th class="px-4 py-2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se generarán dinámicamente las filas -->
+            </tbody>
+        </table>
     </div>
 
     <script src="./scripts/vendedor/vendedor.js" type="module"></script>
