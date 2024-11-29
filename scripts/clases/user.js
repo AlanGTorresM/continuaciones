@@ -80,6 +80,7 @@ class User {
             .select('*')
             .eq('email', email)
             .single();
+            console.log(data.name, data.email, data.id);
         if (!data.name || !data.email || !data.id){
             alert("LAS CREDENCIALES NO EXISTEN!");
             localStorage.removeItem('user');

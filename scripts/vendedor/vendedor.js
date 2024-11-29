@@ -170,4 +170,5 @@ async function deleteProduct(id) {
 }
 
 // Carga los productos al iniciar
+document.addEventListener('DOMContentLoaded', verificarLogin);
 document.addEventListener('DOMContentLoaded', loadProducts);

@@ -7,7 +7,6 @@ export function headerIsLoggedIn(nombre){
                 <p class="text-2xl font-bold text-orange-400">Hola ${nombre}!</p>
                 <ul class="flex space-x-6">
                     <li class="text-orange-400 hover:text-green-500 transition-colors"><a href="paginaPincipal.html">Inicio</a></li>
-                    <li class="text-orange-400 hover:text-green-500 transition-colors"><a href="crear_sesion.html">Crear cuenta</a></li>
                     <li id="cerrar_sesion" class="text-orange-400 hover:text-green-500 transition-colors"><a href="#">Cerrar sesión</a></li>
                     <li class="text-orange-400 hover:text-green-500 transition-colors"><a href="#footer">Contacto</a></li>
                 </ul>
