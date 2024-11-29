@@ -1,13 +1,25 @@
 import { anuncio } from './models/anuncio.js';
 import { listenerScroll, listenerClose } from './models/anuncio_control.js';
-import {supabase} from './Base de datos/supabase.js'
+import User from './clases/user.js';
 
 export function verificarLogin() {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const userBrowser = JSON.parse(localStorage.getItem('user'));
 
-    if (user) {
-        console.log('Usuario logueado:', user);
-        return user; // Devuelve los datos del usuario
+    if (userBrowser) {
+        try{
+        const userSupa = User.validate(userBrowser["email"]);
+        if(userBrowser["id"] == userSupa["id"] && userBrowser["name"] == userSupa["name"] && userBrowser["email"] == userSupa["email"]) {
+            alert("LAS CREDENCIALES NO CONCUERDAN");
+            localStorage.removeItem('user');
+            return;
+        }
+        console.log('Usuario logueado:', userBrowser);
+        return userBrowser; // Devuelve los datos del usuario
+        } catch (error) {
+            alert("LAS CREDENCIALES NO EXISTEN!");
+            localStorage.removeItem('user');
+            return;
+        }
     } else {
         // Verifica si ya existe un anuncio antes de agregar uno nuevo
         if (!document.querySelector('.anuncio')) {

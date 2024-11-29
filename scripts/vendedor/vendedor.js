@@ -1,5 +1,7 @@
 import { supabase } from '../Base de datos/supabase.js';
+import { verificarLogin } from '../login.js';
 
+verificarLogin();
 const tablaProductos = document.getElementById('tabla-productos');
 const productForm = document.getElementById('productForm');
 const openModal = document.getElementById('openModal');

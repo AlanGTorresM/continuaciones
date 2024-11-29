@@ -35,7 +35,7 @@ submit.addEventListener('click', async (e) => {
         console.log("Guardando en localStorage:", userToStore);
         localStorage.setItem("user", JSON.stringify(userToStore));
   
-        window.location.href = 'articulo_individual.html';
+        window.location.href = 'index.html';
     } catch (error) {
         console.error("Error al registrar el usuario:", error);
         alert("Hubo un error al registrar el usuario. Por favor, intenta de nuevo.");

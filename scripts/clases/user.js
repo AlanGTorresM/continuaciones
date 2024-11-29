@@ -77,6 +77,27 @@ class User {
         console.log('Inicio de sesión exitoso:', data);
         return new User( data.name, data.email, data.password, data.cellphone, data.id); // Crea una instancia de User
     }
+    static async validate(email) {
+
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', email)
+            .single();
+        if (!data){
+            alert("LAS CREDENCIALES NO EXISTEN!");
+            localStorage.removeItem('user');
+            return;
+        }
+
+        if (error) {
+            console.error('Error al validar:', error.message);
+            throw new Error('Error al validar.');
+        }
+
+        console.log('Inicio de sesión exitoso:', data);
+        return new User( data.name, data.email, data.id); // Crea una instancia de User
+    }
 }
 
 export default User;
