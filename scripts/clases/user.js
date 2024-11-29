@@ -6,8 +6,6 @@ class User {
         this.cellphone = cellphone;
         this.email = email;
         this.password = password;
-        this.isLoggedIn = false;
-        this.isSeller = false;
         this.wishlist = [];
         this.productsBought = [];
         this.cart = [];
@@ -25,8 +23,6 @@ class User {
             email: this.email,
             password: this.password,
             cellphone: this.cellphone,
-            is_logged_in: this.isLoggedIn,
-            is_seller: this.isSeller,
             wishlist: this.wishlist,
             products_bought: this.productsBought,
             cart: this.cart,
@@ -84,7 +80,7 @@ class User {
             .select('*')
             .eq('email', email)
             .single();
-        if (!data){
+        if (!data.name || !data.email || !data.id){
             alert("LAS CREDENCIALES NO EXISTEN!");
             localStorage.removeItem('user');
             return;

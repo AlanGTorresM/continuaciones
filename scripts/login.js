@@ -1,6 +1,7 @@
 import { anuncio } from './models/anuncio.js';
 import { listenerScroll, listenerClose } from './models/anuncio_control.js';
 import User from './clases/user.js';
+import { headerIsLoggedIn, headerIsNotLoggedIn } from './models/header.js';
 
 export function verificarLogin() {
     const userBrowser = JSON.parse(localStorage.getItem('user'));
@@ -13,6 +14,7 @@ export function verificarLogin() {
             localStorage.removeItem('user');
             return;
         }
+        headerIsLoggedIn(userBrowser["name"]);
         console.log('Usuario logueado:', userBrowser);
         return userBrowser; // Devuelve los datos del usuario
         } catch (error) {
@@ -21,6 +23,7 @@ export function verificarLogin() {
             return;
         }
     } else {
+        headerIsNotLoggedIn();
         // Verifica si ya existe un anuncio antes de agregar uno nuevo
         if (!document.querySelector('.anuncio')) {
             document.body.innerHTML += anuncio();

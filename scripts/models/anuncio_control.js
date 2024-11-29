@@ -4,7 +4,7 @@ export function listenerScroll(){
         e.preventDefault();
         let anuncio = document.querySelector(".anuncio");
         const scrollY = window.scrollY;
-        anuncio.style.transform = `translateY(${scrollY}px)`;
+        if(anuncio) anuncio.style.transform = `translateY(${scrollY}px)`;
     });
 }
 export function listenerClose() {
