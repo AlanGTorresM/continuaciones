@@ -8,8 +8,10 @@ const openModal = document.getElementById('openModal');
 const closeModal = document.getElementById('closeModal');
 const modal = document.getElementById('productModal');
 
-// Abrir modal
+// Abrir modal para agregar producto
 openModal.addEventListener('click', () => {
+    productForm.reset(); // Limpia el formulario
+    productForm.removeAttribute('data-product-id'); // Limpia el atributo del ID del producto
     modal.style.display = 'flex';
 });
 
@@ -27,19 +29,18 @@ window.addEventListener('click', (event) => {
 
 // Función para cargar productos desde Supabase
 async function loadProducts() {
-    const currentUser = JSON.parse(localStorage.getItem('user')); // Analiza la cadena JSON almacenada
+    const currentUser = JSON.parse(localStorage.getItem('user'));
     if (!currentUser || !currentUser.id) {
         console.error('Usuario no autenticado.');
         return;
     }
 
-    const currentUserId = currentUser.id; // Accede al nombre del usuario
-    console.log(currentUserId); // Muestra en la consola para depuración
+    const currentUserId = currentUser.id;
 
     const { data: productos, error } = await supabase
         .from('productos')
         .select('*')
-        .eq('vendedor_id', currentUserId); // Filtrar por ID del usuario actual
+        .eq('vendedor_id', currentUserId);
 
     if (error) {
         console.error('Error al cargar productos:', error);
@@ -57,7 +58,7 @@ async function loadProducts() {
         // Columna de imagen
         const imgCell = row.insertCell(0);
         const img = document.createElement('img');
-        img.src = producto.images[0]
+        img.src = producto.images[0];
         img.alt = "Imagen del producto";
         img.style.width = '50px';
         imgCell.appendChild(img);
@@ -68,27 +69,50 @@ async function loadProducts() {
 
         // Columna de acciones
         const actionsCell = row.insertCell(2);
+
+        // Botón de eliminar
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Eliminar';
         deleteBtn.className = 'bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600';
         deleteBtn.addEventListener('click', () => deleteProduct(producto.id));
         actionsCell.appendChild(deleteBtn);
+
+        // Botón de modificar
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Modificar';
+        editBtn.className = 'bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 ml-2';
+        editBtn.addEventListener('click', () => openEditModal(producto));
+        actionsCell.appendChild(editBtn);
     });
+}
+
+// Función para abrir el modal y rellenar con los datos del producto seleccionado
+function openEditModal(producto) {
+    // Rellenar el formulario modal con los datos del producto
+    document.getElementById('productName').value = producto.nombre;
+    document.getElementById('unitPrice').value = producto.precio;
+    document.getElementById('stock').value = producto.stock;
+    document.getElementById('description').value = producto.descripcion;
+
+    // Guardar el ID del producto en un atributo del formulario para referencia
+    productForm.setAttribute('data-product-id', producto.id);
+
+    // Mostrar el modal
+    modal.style.display = 'flex';
 }
 
 // Función para subir una imagen a Supabase Storage
 async function uploadImage(file) {
-    const fileName = `${Date.now()}_${file.name}`; // Genera un nombre único
+    const fileName = `${Date.now()}_${file.name}`;
     const { data, error } = await supabase.storage
-        .from('imagenes') // Asegúrate de que el bucket se llame 'imagenes'
-        .upload(fileName, file); // Sube el archivo
+        .from('imagenes')
+        .upload(fileName, file);
 
     if (error) {
         console.error('Error al subir la imagen:', error);
         throw error;
     }
 
-    // Obtén la URL pública de la imagen subida
     const { data: urlData, error: urlError } = supabase.storage
         .from('imagenes')
         .getPublicUrl(data.path);
@@ -98,15 +122,14 @@ async function uploadImage(file) {
         throw urlError;
     }
 
-    return urlData.publicUrl; // Retorna la URL pública para usarla en la base de datos
+    return urlData.publicUrl;
 }
-
 
 // Evento submit del formulario
 productForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const currentUser = JSON.parse(localStorage.getItem('user')); // Obtén el usuario autenticado
+    const currentUser = JSON.parse(localStorage.getItem('user'));
     if (!currentUser || !currentUser.id) {
         alert('Usuario no autenticado.');
         return;
@@ -114,49 +137,67 @@ productForm.addEventListener('submit', async (event) => {
 
     const formData = new FormData(productForm);
 
+    const productId = productForm.getAttribute('data-product-id');
     const productName = formData.get('productName');
     const unitPrice = parseFloat(formData.get('unitPrice'));
     const stock = parseInt(formData.get('stock'), 10);
     const description = formData.get('description');
-    const productImages = formData.getAll('productImage'); // Todas las imágenes seleccionadas
+    const productImages = formData.getAll('productImage');
 
     try {
-        // Sube todas las imágenes en paralelo
-        const imageUrls = await Promise.all(
-            productImages.map(image => uploadImage(image))
-        );
-        console.log(imageUrls[0], imageUrls[1]);
-
-        // Inserta el producto en la base de datos
-        const { error } = await supabase
-            .from('productos')
-            .insert({
-                nombre: productName,
-                precio: unitPrice,
-                stock: stock,
-                descripcion: description,
-                images: imageUrls, // Primera imagen como principal
-                vendedor_id: currentUser.id, // ID del vendedor
-            });
-
-        if (error) {
-            throw error;
+        let imageUrls = [];
+        if (productImages.length > 0 && productImages[0].name) {
+            imageUrls = await Promise.all(
+                productImages.map(image => uploadImage(image))
+            );
         }
 
-        alert('Producto agregado correctamente.');
+        const productData = {
+            nombre: productName,
+            precio: unitPrice,
+            stock: stock,
+            descripcion: description,
+        };
+
+        if (imageUrls.length > 0) {
+            productData.images = imageUrls;
+        }
+
+        if (productId) {
+            const { error } = await supabase
+                .from('productos')
+                .update(productData)
+                .eq('id', productId);
+
+            if (error) throw error;
+
+            alert('Producto modificado correctamente.');
+        } else {
+            const { error } = await supabase
+                .from('productos')
+                .insert({
+                    ...productData,
+                    vendedor_id: currentUser.id,
+                });
+
+            if (error) throw error;
+
+            alert('Producto agregado correctamente.');
+        }
+
         productForm.reset();
         modal.style.display = 'none';
-        loadProducts(); // Recarga la tabla de productos
+        loadProducts();
     } catch (error) {
-        console.error('Error al agregar el producto:', error);
-        alert('Hubo un error al agregar el producto. Revisa la consola para más detalles.');
+        console.error('Error al guardar el producto:', error);
+        alert('Hubo un error al guardar el producto.');
     }
 });
 
 // Función para eliminar un producto
 async function deleteProduct(id) {
     const { error } = await supabase
-        .from('productos') // Cambia 'productos' por el nombre de tu tabla
+        .from('productos')
         .delete()
         .eq('id', id);
 
@@ -166,7 +207,7 @@ async function deleteProduct(id) {
     }
 
     alert('Producto eliminado.');
-    loadProducts(); // Recarga los productos para actualizar la tabla
+    loadProducts();
 }
 
 // Carga los productos al iniciar
