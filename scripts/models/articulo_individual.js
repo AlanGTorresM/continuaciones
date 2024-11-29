@@ -27,9 +27,17 @@ async function cargarProductos() {
                     <h3 class="text-lg font-semibold text-gray-800">${producto.nombre}</h3>
                     <p class="text-gray-600 mt-2">${producto.descripcion}</p>
                     <span class="text-orange-500 font-bold text-lg mt-4 block">$${producto.precio} MXN</span>
-                    <button class="mt-4 px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition">
-                        Ver Detalles
-                    </button>
+                    <div class="mt-4 flex gap-2">
+                        <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition">
+                            Comprar
+                        </button>
+                        <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
+                            Añadir al carrito
+                        </button>
+                        <button class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition">
+                            Wishlist
+                        </button>
+                    </div>
                 </div>
             `;
             productosContainer.appendChild(tarjetaProducto);
