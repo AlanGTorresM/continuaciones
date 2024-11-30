@@ -42,7 +42,7 @@ if (carrito.length > 0) {
 }
 
 // Manejar la finalización de la compra
-document.getElementById('finalizar-compra').addEventListener('click', async () => {
+document.getElementById('formulario-compra').addEventListener('click', async () => {
     if (carrito.length === 0) {
         alert('El carrito está vacío. No puedes finalizar la compra.');
         return;
