@@ -42,62 +42,99 @@ if (carrito.length > 0) {
 }
 
 // Manejar la finalización de la compra
-document.getElementById('formulario-compra').addEventListener('click', async () => {
+document.getElementById('formulario-compra').addEventListener('submit', async (e) => {
+    e.preventDefault();
     if (carrito.length === 0) {
         alert('El carrito está vacío. No puedes finalizar la compra.');
         return;
     }
+    const idComprador = JSON.parse(localStorage.getItem('user')).id;
 
     try {
-        // Procesar cada producto del carrito
+        
+
         for (const producto of carrito) {
-            // Validar stock
-            if (producto.cantidad > producto.stock) {
-                alert(`No hay suficiente stock para el producto: ${producto.nombre}`);
+            const direccion = document.getElementById('direccion').value;
+            const idVendedor = producto.vendedor_id;
+            // Validar stock actual
+            const { data: productoSupabase, error: stockFetchError } = await supabase
+                .from('productos')
+                .select('stock')
+                .eq('id', producto.id)
+                .single();
+
+            if (stockFetchError) {
+                console.error(`Error al consultar el stock del producto ${producto.nombre}:`, stockFetchError.message);
+                alert(`Hubo un error al validar el stock del producto ${producto.nombre}. Inténtalo de nuevo.`);
+                return;
+            }
+
+            const stockDisponible = productoSupabase.stock;
+
+            if (producto.cantidad > stockDisponible) {
+                alert(`No hay suficiente stock para el producto: ${producto.nombre}. Stock disponible: ${stockDisponible}.`);
                 return;
             }
 
             // Actualizar el stock en la base de datos
-            const { error: stockError } = await supabase
+            const { error: stockUpdateError } = await supabase
                 .from('productos')
-                .update({ stock: producto.stock - producto.cantidad })
+                .update({ stock: stockDisponible - producto.cantidad })
                 .eq('id', producto.id);
 
-            if (stockError) {
-                console.error(`Error al actualizar el stock del producto ${producto.nombre}:`, stockError.message);
-                alert(`Hubo un error con el producto ${producto.nombre}. Inténtalo de nuevo.`);
+            if (stockUpdateError) {
+                console.error(`Error al actualizar el stock del producto ${producto.nombre}:`, stockUpdateError.message);
+                alert(`Hubo un error al procesar el producto ${producto.nombre}. Inténtalo de nuevo.`);
                 return;
             }
 
-            // Registrar la transacción
-            const idComprador = JSON.parse(localStorage.getItem('user')).id;
-            const idVendedor = producto.vendedor_id;
+            // Registrar transacción para el comprador
             const conceptoCompra = `Compra de ${producto.cantidad} unidad(es) de ${producto.nombre}`;
-
-            const { error: transaccionError } = await supabase
+            const { error: compraError } = await supabase
                 .from('transacciones')
                 .insert([{
                     id_comprador: idComprador,
                     id_vendedor: idVendedor,
                     concepto: conceptoCompra,
-                    direccion: "Dirección del comprador", // Puedes reemplazar por un campo de formulario
+                    direccion: direccion,
                     tipo_transaccion: 'compra',
+                    monto: producto.precio
+                }]);
+
+            if (compraError) {
+                console.error(`Error al registrar la transacción de compra para el producto ${producto.nombre}:`, compraError.message);
+                alert(`Hubo un error al registrar la transacción de compra para el producto ${producto.nombre}. Inténtalo de nuevo.`);
+                return;
+            }
+
+            // Registrar transacción para el vendedor
+            const conceptoVenta = `Venta de ${producto.cantidad} unidad(es) de ${producto.nombre}`;
+            const { error: ventaError } = await supabase
+                .from('transacciones')
+                .insert([{
+                    id_comprador: idComprador,
+                    id_vendedor: producto.vendedor_id,
+                    concepto: conceptoVenta,
+                    direccion: direccion,
+                    tipo_transaccion: 'venta',
                     monto: producto.precio * producto.cantidad
                 }]);
 
-            if (transaccionError) {
-                console.error(`Error al registrar la transacción del producto ${producto.nombre}:`, transaccionError.message);
-                alert(`Hubo un error con la transacción del producto ${producto.nombre}. Inténtalo de nuevo.`);
+            if (ventaError) {
+                console.error(`Error al registrar la transacción de venta para el producto ${producto.nombre}:`, ventaError.message);
+                alert(`Hubo un error al registrar la transacción de venta para el producto ${producto.nombre}. Inténtalo de nuevo.`);
                 return;
             }
         }
 
-        // Limpiar el carrito después de la compra
+        // Limpiar el carrito después de procesar todo
         localStorage.removeItem('carrito');
         alert('¡Compra realizada con éxito!');
-        window.location.href = 'index.html'; // Redirigir al inicio u otra página
+        window.location.href = 'index.html'; // Redirigir al inicio o página de confirmación
+
     } catch (error) {
         console.error('Error al finalizar la compra:', error.message);
         alert('Hubo un error inesperado. Inténtalo de nuevo.');
     }
 });
+
