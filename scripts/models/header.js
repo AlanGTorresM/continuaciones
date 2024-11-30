@@ -21,7 +21,7 @@ export function headerIsLoggedIn(nombre) {
             </div>
             <div class="mt-4 flex justify-between items-center">
                 <button id="cerrar-carrito" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Cerrar</button>
-                <button class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">Finalizar compra</button>
+                <button id="iniciar-compra" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">Finalizar compra</button>
             </div>
         </div>
     </div>
@@ -38,6 +38,7 @@ export function headerIsLoggedIn(nombre) {
     const carritoBtn = document.querySelector("#carrito");
     const carritoModal = document.querySelector("#carrito-modal");
     const cerrarCarritoBtn = document.querySelector("#cerrar-carrito");
+    const comprarEnCarrito = document.querySelector('#iniciar-compra');
 
     carritoBtn.addEventListener('click', () => {
         mostrarCarrito();
@@ -46,6 +47,11 @@ export function headerIsLoggedIn(nombre) {
 
     cerrarCarritoBtn.addEventListener('click', () => {
         carritoModal.classList.add('hidden');
+    });
+    
+    comprarEnCarrito.addEventListener('click', () => {
+        // Redireccionar a la página de pago
+        window.location.href = 'compras_multiples.html';
     });
 }
 

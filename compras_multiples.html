@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra</title>
+    <!-- CSS compilado de Tailwind -->
+    <link rel="stylesheet" href="dist/styles.css">
+    <!-- Fuentes para nuestra página -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Encabezado fijo -->
+    <header id="navegador" class="bg-gray-800 shadow-md z-50 p-4 text-white">
+        <h1 class="text-2xl font-bold">Finalizar Compra</h1>
+    </header>
+    <main class="container mx-auto p-6">
+        <!-- Contenedor del carrito -->
+        <div id="carrito-detalle" class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Detalle de tu compra</h2>
+            <div id="productos-lista" class="divide-y divide-gray-200">
+                <!-- Aquí se cargarán los productos dinámicamente -->
+            </div>
+            <div class="mt-6">
+                <p class="text-lg font-bold text-gray-700">Total:</p>
+                <p id="total-final" class="text-2xl font-bold text-green-600">$0 MXN</p>
+            </div>
+            <!-- Formulario de compra -->
+            <form id="formulario-compra" class="mt-6">
+                <div class="mb-4">
+                    <label for="nombre" class="block text-gray-700 font-bold">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required readonly class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500">
+                </div>
+                <div class="mb-4">
+                    <label for="direccion" class="block text-gray-700 font-bold">Dirección:</label>
+                    <input type="text" id="direccion" name="direccion" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500">
+                </div>
+                <div class="mb-4">
+                    <label for="correo" class="block text-gray-700 font-bold">Correo electrónico:</label>
+                    <input type="email" id="correo" name="correo" readonly required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500">
+                </div>
+                
+                <button type="submit" class="mt-4 inline-block bg-orange-400 text-white px-6 py-3 rounded-full shadow hover:bg-green-500 transition-colors">
+                    Confirmar Compra
+                </button>
+            </form>
+        </div>
+    </main>
+</body>
+<script src="./scripts/compras_multiples.js" type="module"></script>
+</html>
