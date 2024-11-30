@@ -1,8 +1,9 @@
 import { supabase } from './../Base de datos/supabase.js';
 
+
 async function cargarProductos() {
     const productosContainer = document.querySelector('.products .grid');
-    
+
     try {
         // Obtener datos de la tabla 'productos'
         const { data: productos, error } = await supabase
@@ -27,25 +28,39 @@ async function cargarProductos() {
                     <h3 class="text-lg font-semibold text-gray-800">${producto.nombre}</h3>
                     <p class="text-gray-600 mt-2">${producto.descripcion}</p>
                     <span class="text-orange-500 font-bold text-lg mt-4 block">$${producto.precio} MXN</span>
-                    <div class="mt-4 flex gap-2">
-                        <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition">
-                            Comprar
-                        </button>
-                        <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
-                            Añadir al carrito
-                        </button>
-                        <button class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition">
-                            Wishlist
-                        </button>
-                    </div>
+                    <button class="px-4 py-2 mt-4 bg-green-500 text-white rounded-md hover:bg-green-600 transition comprar-btn">
+                        Comprar
+                    </button>
                 </div>
             `;
+            tarjetaProducto.querySelector('.comprar-btn').addEventListener('click', () => {
+                // Guardar datos del producto en localStorage
+                localStorage.setItem('productoSeleccionado', JSON.stringify(producto));
+                // Redirigir a la página de compra
+                window.location.href = 'compras.html';
+            });
             productosContainer.appendChild(tarjetaProducto);
         });
     } catch (error) {
         console.error('Error al obtener los objetos:', error.message);
     }
 }
+
+
+if (document.querySelector('.products')) {
+    document.addEventListener('DOMContentLoaded', cargarProductos);
+}
+
+if (window.location.pathname.includes('compra.html')) {
+    const productoSeleccionado = JSON.parse(localStorage.getItem('productoSeleccionado'));
+    if (productoSeleccionado) {
+        document.getElementById('product-image').src = productoSeleccionado.images[0] || 'images/default.jpg';
+        document.getElementById('product-name').textContent = productoSeleccionado.nombre;
+        document.getElementById('product-description').textContent = productoSeleccionado.descripcion;
+        document.getElementById('product-price').textContent = `$${productoSeleccionado.precio} MXN`;
+    }
+}
+
 
 // Cargar productos al cargar la página
 document.addEventListener('DOMContentLoaded', cargarProductos);

@@ -18,7 +18,7 @@ export function verificarLogin() {
         console.log('Usuario logueado:', userBrowser);
         return userBrowser; // Devuelve los datos del usuario
         } catch (error) {
-            alert("LAS CREDENCIALES NO EXISTEN!");
+            alert(error.message);
             localStorage.removeItem('user');
             return;
         }
