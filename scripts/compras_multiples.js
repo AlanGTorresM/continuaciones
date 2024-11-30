@@ -98,7 +98,7 @@ document.getElementById('formulario-compra').addEventListener('submit', async (e
                     concepto: conceptoCompra,
                     direccion: direccion,
                     tipo_transaccion: 'compra',
-                    monto: producto.precio
+                    monto: producto.precio * producto.cantidad
                 }]);
 
             if (compraError) {

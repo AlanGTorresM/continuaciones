@@ -94,3 +94,10 @@ async function actualizarCantidad(productId, cantidadCambio) {
         alert('Hubo un error inesperado. Inténtalo de nuevo.');
     }
 }
+export function eliminarDelCarrito(productId) {
+    // Obtener el carrito actual desde el localStorage
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    carrito = carrito.filter(item => item.id !== productId);
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+    mostrarCarrito();
+}
