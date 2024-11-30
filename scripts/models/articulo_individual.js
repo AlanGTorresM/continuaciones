@@ -20,9 +20,11 @@ async function cargarProductos() {
 
         // Crear e inyectar las tarjetas de productos
         productos.forEach(producto => {
-            const tarjetaProducto = document.createElement('div');
-            tarjetaProducto.className = 'product-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition';
-            tarjetaProducto.innerHTML = `
+            if (producto.stock > 0 && JSON.parse(localStorage.getItem('user'))['id'] != producto.vendedor_id){
+                console.log(productos.vendedor_id);
+                const tarjetaProducto = document.createElement('div');
+                tarjetaProducto.className = 'product-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition';
+                tarjetaProducto.innerHTML = `
                 <img src="${producto.images[0] || 'images/default.jpg'}" alt="${producto.nombre}" class="w-full h-48 object-cover">
                 <div class="p-4">
                     <h3 class="text-lg font-semibold text-gray-800">${producto.nombre}</h3>
@@ -32,14 +34,15 @@ async function cargarProductos() {
                         Comprar
                     </button>
                 </div>
-            `;
-            tarjetaProducto.querySelector('.comprar-btn').addEventListener('click', () => {
+                `;
+                tarjetaProducto.querySelector('.comprar-btn').addEventListener('click', () => {
                 // Guardar datos del producto en localStorage
                 localStorage.setItem('productoSeleccionado', JSON.stringify(producto));
                 // Redirigir a la página de compra
                 window.location.href = 'compras.html';
             });
             productosContainer.appendChild(tarjetaProducto);
+            } 
         });
     } catch (error) {
         console.error('Error al obtener los objetos:', error.message);

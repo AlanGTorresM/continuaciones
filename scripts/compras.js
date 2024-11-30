@@ -19,6 +19,10 @@ const cantidadInput = document.getElementById('cantidad');
 const totalCompra = document.getElementById('total-compra');
 const errorCantidad = document.getElementById('error-cantidad');
 
+// Rellenar los datos del comprador en el formulario
+document.getElementById('nombre').value = JSON.parse(localStorage.getItem('user')).name;
+document.getElementById('correo').value = JSON.parse(localStorage.getItem('user')).email;
+
 // Actualizar el total y validar el stock
 cantidadInput.addEventListener('input', () => {
     const cantidad = parseInt(cantidadInput.value) || 0;
@@ -43,30 +47,72 @@ document.getElementById('formulario-compra').addEventListener('submit', async (e
         alert('La cantidad solicitada excede el stock disponible.');
         return;
     }
-
     const nombre = document.getElementById('nombre').value;
     const direccion = document.getElementById('direccion').value;
     const correo = document.getElementById('correo').value;
+
+    const total = cantidad * productoSeleccionado.precio;
 
     console.log('Datos de la compra:', {
         nombre,
         direccion,
         correo,
         cantidad,
-        total: cantidad * productoSeleccionado.precio,
+        total,
         producto: productoSeleccionado
     });
 
-    // Actualizar el stock del producto en la base de datos
     try {
-        const { error } = await supabase
+        // 1. Actualizar el stock del producto
+        const { error: stockError } = await supabase
             .from('productos')
             .update({ stock: productoSeleccionado.stock - cantidad })
             .eq('id', productoSeleccionado.id);
 
-        if (error) {
-            console.error('Error al actualizar el stock:', error.message);
+        if (stockError) {
+            console.error('Error al actualizar el stock:', stockError.message);
             alert('Hubo un error al procesar tu compra. Inténtalo de nuevo.');
+            return;
+        }
+
+        // 2. Registrar la transacción del comprador
+        const idComprador = JSON.parse(localStorage.getItem('user')).id;
+        const idVendedor = productoSeleccionado.vendedor_id;
+        const conceptoCompra = `Compra de ${cantidad} unidad(es) de ${productoSeleccionado.nombre}`;
+        const conceptoVenta = `Venta de ${cantidad} unidad(es) de ${productoSeleccionado.nombre}`;
+
+        const { error: transaccionCompraError } = await supabase
+            .from('transacciones')
+            .insert([{
+                id_comprador: idComprador,
+                id_vendedor: idVendedor,
+                concepto: conceptoCompra,
+                direccion: direccion,
+                tipo_transaccion: 'compra',
+                monto: total
+            }]);
+
+        if (transaccionCompraError) {
+            console.error('Error al registrar la transacción de compra:', transaccionCompraError.message);
+            alert('Hubo un error al registrar la transacción de compra. Inténtalo de nuevo.');
+            return;
+        }
+
+        // 3. Registrar la transacción del vendedor
+        const { error: transaccionVentaError } = await supabase
+            .from('transacciones')
+            .insert([{
+                id_comprador: null, // Opcional: indica que no aplica para el vendedor
+                id_vendedor: idVendedor,
+                concepto: conceptoVenta,
+                direccion: direccion,
+                tipo_transaccion: 'venta',
+                monto: total
+            }]);
+
+        if (transaccionVentaError) {
+            console.error('Error al registrar la transacción de venta:', transaccionVentaError.message);
+            alert('Hubo un error al registrar la transacción de venta. Inténtalo de nuevo.');
             return;
         }
 
@@ -78,3 +124,4 @@ document.getElementById('formulario-compra').addEventListener('submit', async (e
         alert('Hubo un error inesperado. Inténtalo de nuevo.');
     }
 });
+
