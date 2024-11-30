@@ -5,12 +5,8 @@ import User from './clases/user.js';
 
 verificarLogin();
 
-
-
-
 // Manejar clic en "Iniciar Sesión"
 document.addEventListener('click', (e) => {
-    
     if (e.target.closest('#iniciar_sesion a')) {
         e.preventDefault();
 
@@ -21,34 +17,63 @@ document.addEventListener('click', (e) => {
         }
 
         const loginButton = document.querySelector('#iniciar_Sesion button');
-        const login = loginButton.addEventListener('click', async (a) => {
+        loginButton.addEventListener('click', async (a) => {
             a.preventDefault();
-            const email = document.querySelector('#Correo').value.trim();
-            const password = document.querySelector('#Password').value.trim();
+            const emailField = document.querySelector('#Correo');
+            const passwordField = document.querySelector('#Password');
+            const email = emailField.value.trim();
+            const password = passwordField.value.trim();
 
-            if (!email || !password) {
-                alert('Por favor, completa todos los campos.');
-                return;
+            limpiarErrores();
+
+            let isValid = true;
+
+            if (!email) {
+                crearMensajeError(emailField, 'El correo electrónico es obligatorio.');
+                isValid = false;
+            } else if (!validarEmail(email)) {
+                crearMensajeError(emailField, 'El correo electrónico no tiene un formato válido.');
+                isValid = false;
             }
 
+            if (!password) {
+                crearMensajeError(passwordField, 'La contraseña es obligatoria.');
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
             try {
-                // Usar el método estático login de la clase User
                 const user = await User.login(email, password);
                 alert('Inicio de sesión exitoso.');
-                console.log('Usuario:', user);
 
-                // Guardar el estado del login en Local Storage
                 localStorage.setItem('user', JSON.stringify({
                     id: user.id,
                     email: user.email,
                     name: user.name || 'Usuario',
                 }));
 
-                // Redirigir o actualizar la página según sea necesario
-                window.location.href = 'index.html';
+                window.location.href = 'paginaPincipal.html';
             } catch (error) {
-                alert(error.message);
+                crearMensajeError(loginButton, error.message);
             }
         });
     }
 });
+
+function crearMensajeError(campo, mensaje) {
+    const mensajeError = document.createElement('p');
+    mensajeError.textContent = mensaje;
+    mensajeError.className = 'error-message text-red-500 text-sm mt-1';
+    campo.parentNode.insertBefore(mensajeError, campo.nextSibling);
+}
+
+function limpiarErrores() {
+    const mensajesError = document.querySelectorAll('.error-message');
+    mensajesError.forEach(mensaje => mensaje.remove());
+}
+
+function validarEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+}
