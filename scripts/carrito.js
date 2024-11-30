@@ -14,7 +14,7 @@ export function mostrarCarrito() {
         productoCarrito.className = 'flex justify-between items-center border-b pb-2';
         productoCarrito.innerHTML = `
             <div class="flex items-center space-x-4">
-                <img src="${item.images[0] || 'images/default.jpg'}" alt="${item.nombre}" class="w-16 h-16 rounded-lg object-cover">
+                <img src="${item.images[0] || 'images/default.jpg'}" alt="${item.nombre}" class="rounded-lg object-cover">
                 <div>
                     <h4 class="text-sm font-semibold">${item.nombre}</h4>
                     <p class="text-xs text-gray-600">Cantidad: ${item.cantidad}</p>

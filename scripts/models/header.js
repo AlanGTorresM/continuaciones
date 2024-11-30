@@ -1,4 +1,4 @@
-import { mostrarCarrito } from './carrito.js';
+import { mostrarCarrito } from './../carrito.js';
 export function headerIsLoggedIn(nombre) {
     const header = document.querySelector("#navegador");
     header.innerHTML = 
