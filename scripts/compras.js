@@ -63,6 +63,7 @@ document.getElementById('formulario-compra').addEventListener('submit', async (e
     });
 
     try {
+        if(cantidad === 0){ alert('No hay cantidad!'); return;}
         // 1. Actualizar el stock del producto
         const { error: stockError } = await supabase
             .from('productos')
