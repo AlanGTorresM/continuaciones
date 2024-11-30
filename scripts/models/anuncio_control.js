@@ -13,7 +13,7 @@ export function listenerClose() {
     anuncios.forEach((anuncio) => {
         // Agregar un evento de clic al documento para cerrar este anuncio específico
         const closeListener = (e) => {
-            if (!anuncio.contains(e.target)) {
+            if (!anuncio.contains(e.target) || e.target === document.querySelector('#inicio') ) {
                 anuncio.remove();
                 document.removeEventListener('click', closeListener); // Limpia el listener
             }

@@ -24,7 +24,7 @@ export function verificarLogin() {
         }
     } else {
         headerIsNotLoggedIn();
-        // Verifica si ya existe un anuncio antes de agregar uno nuevo
+        // crea un anuncio en caso de no estar logeado
         if (!document.querySelector('.anuncio')) {
             document.body.innerHTML += anuncio();
             listenerScroll();

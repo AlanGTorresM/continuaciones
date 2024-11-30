@@ -5,8 +5,12 @@ import User from './clases/user.js';
 
 verificarLogin();
 
+
+
+
 // Manejar clic en "Iniciar Sesión"
 document.addEventListener('click', (e) => {
+    
     if (e.target.closest('#iniciar_sesion a')) {
         e.preventDefault();
 
@@ -17,7 +21,7 @@ document.addEventListener('click', (e) => {
         }
 
         const loginButton = document.querySelector('#iniciar_Sesion button');
-        loginButton.addEventListener('click', async (a) => {
+        const login = loginButton.addEventListener('click', async (a) => {
             a.preventDefault();
             const email = document.querySelector('#Correo').value.trim();
             const password = document.querySelector('#Password').value.trim();

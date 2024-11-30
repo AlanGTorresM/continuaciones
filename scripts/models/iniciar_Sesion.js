@@ -16,7 +16,7 @@ export function inicio_sesion(){
                         class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
                 </div>
                 
-                <button type="submit"
+                <button id="iniciar" type="submit"
                     class="w-full bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
                     Iniciar Sesión
                 </button>
