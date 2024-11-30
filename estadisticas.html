@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas</title>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <!-- Navbar -->
+    <header id="navegador" class=" bg-gray-800 shadow-md z-50">
+        
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <canvas id="barChart" class="w-full h-64"></canvas>
+        </section>
+        <section class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Totales</h2>
+            <div class="flex justify-between">
+                <p id="totalCompras" class="text-lg font-medium text-green-600">Total Compras: $0</p>
+                <p id="totalVentas" class="text-lg font-medium text-blue-600">Total Ventas: $0</p>
+            </div>
+        </section>
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">Historial de Compras</h2>
+                <ul id="historialCompras" class="list-disc list-inside text-gray-700"></ul>
+            </div>
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">Historial de Ventas</h2>
+                <ul id="historialVentas" class="list-disc list-inside text-gray-700"></ul>
+            </div>
+        </section>
+    </main>
+    <script type="module" src="./scripts/estadisticas.js"></script>
+    <!--Para las graficas-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--Para Tailwind CSS-->
+    <script src="https://cdn.tailwindcss.com"></script>
+</body>
+</html>
